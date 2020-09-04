@@ -30,7 +30,14 @@ struct LandmarkRow: View {
 
 struct LandmarkRow_Previews: PreviewProvider {
     static var previews: some View {
+        
+        // Groups views together - SwiftUI renders each view in a group seperately
+        Group {
             LandmarkRow(landmark: landmarkData[0]) // Since we've created the Landmark instance above and applied it to landmark var, we can now pass a specific object from json into the view
+            LandmarkRow(landmark: landmarkData[1])
+        }
+        // Only previews the fixed area
+        .previewLayout(.fixed(width: 300, height: 70))
     }
         
 }

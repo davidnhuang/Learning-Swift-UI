@@ -9,7 +9,9 @@ import SwiftUI
 import CoreLocation
 
 // Data structure of Landmark
-struct Landmark: Hashable, Codable {
+
+// For the Identifiable protocol to work, the struct must have an id property, used to make every instance unique
+struct Landmark: Hashable, Codable, Identifiable {
     var id: Int
     var name: String
     fileprivate var imageName: String
