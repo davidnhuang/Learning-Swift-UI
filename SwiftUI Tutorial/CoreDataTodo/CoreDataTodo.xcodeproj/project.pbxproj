@@ -109,10 +109,10 @@
 				63DA9BDD2522EA980075C693 /* ToDoItem.swift */,
 				63DA9BAB2522E85E0075C693 /* Assets.xcassets */,
 				63DA9BB02522E85E0075C693 /* Persistence.swift */,
+				63DA9BE52522F3E70075C693 /* ToDoItemView.swift */,
 				63DA9BB52522E85E0075C693 /* Info.plist */,
 				63DA9BB22522E85E0075C693 /* CoreDataTodo.xcdatamodeld */,
 				63DA9BAD2522E85E0075C693 /* Preview Content */,
-				63DA9BE52522F3E70075C693 /* ToDoItemView.swift */,
 			);
 			path = CoreDataTodo;
 			sourceTree = "<group>";
