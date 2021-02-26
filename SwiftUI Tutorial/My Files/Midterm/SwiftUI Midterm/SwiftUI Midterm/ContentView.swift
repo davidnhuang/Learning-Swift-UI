@@ -32,7 +32,10 @@ struct ContentView: View {
                             }
                             Spacer()
                             Button(action:{updateOrder(order: order)}) {
-                                Text(order.orderStatus == .pending ? "Prepare" : "Complete").foregroundColor(.blue) // Basically saying is it pending? If yes, show Prepare, or else show Complete
+
+                                //order.orderStatus == .pending ? "Prepare" : "Complete"
+                                Text(statusText(order: order)).foregroundColor(.blue) // Basically saying is it pending? If yes, show Prepare, or else show Complete
+                            
                             }
                         }
                         .frame(height: 50)
@@ -72,6 +75,15 @@ struct ContentView: View {
             try? viewContext.save()
         }
     }
+    
+    func statusText(order: Order) -> String {
+        if order.orderStatus == .pending {
+            return "Prepare"
+        } else {
+            return "Complete"
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
