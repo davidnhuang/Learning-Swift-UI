@@ -99,6 +99,10 @@ class mammal {
     static let lactation = true
     var name: String
     
+    func move() -> String {
+        return "Moving."
+    }
+    
     init(called name: String) {
         self.name = name
     }
@@ -109,6 +113,10 @@ class cat: mammal {
     var canPurr = true
     var domesticated: Bool
     
+    override func move() -> String {
+        return "Prawling."
+    }
+    
     // Make sure to fulfill all required parameters, even parent init
     init(name: String, isFerral: Bool) {
         self.domesticated = isFerral
@@ -118,3 +126,44 @@ class cat: mammal {
 
 var kittyBooBoo = cat(name: "Bum Bum", isFerral: false)
 var dogBooBoo = mammal(called: "Wagster")
+
+dogBooBoo.move()
+kittyBooBoo.move()
+
+// Typecasting
+// Turning one type to another - as? or as!
+
+class album {
+    var artist: String
+    var tracks: Int
+    var releaseYear: Int
+    
+    init(from artist: String, with tracks: Int, on releaseYear: Int) {
+        self.artist = artist
+        self.tracks = tracks
+        self.releaseYear = releaseYear
+    }
+}
+
+class studioAlbum: album {
+    var studio: String
+    
+    init(from artist: String, with tracks: Int, on releaseYear: Int, at studio: String) {
+        self.studio = studio
+        super.init(from: artist, with: tracks, on: releaseYear)
+    }
+}
+
+var AfterHours = studioAlbum(from: "The Weeknd", with: 11, on: 2020, at: "Toronto")
+var YellowSubmarine = album(from: "The Beatles", with: 12, on: 1972)
+
+var allAlbum = [AfterHours, YellowSubmarine]
+for album in allAlbum {
+    // This works since all data in the array is a class or subclass of album
+    print(album.releaseYear)
+    
+    // if the album is the studioAlbum, then run the following
+    if let studioAlbum = album as? studioAlbum {
+        print (studioAlbum.studio)
+    }
+}
