@@ -7,11 +7,25 @@
 
 import SwiftUI
 
-struct ContentView: View {
+// Manages text input and character limit
+class textInputManager: ObservableObject {
+    var charLimit = 8 // 8 digit limit
     
-    @State private var checkAmount = ""
-    @State private var numberOfPeople = 2
-    @State private var tipPercentage = 2
+    @Published var inputValue = "" {
+        didSet {
+            if inputValue.count > charLimit {
+                inputValue = String(inputValue.prefix(charLimit))
+            }
+        }
+    }
+}
+
+struct ContentView: View {
+        
+    //@State private var checkAmount = "" // main input
+    @ObservedObject private var checkAmount = textInputManager()
+    @State private var numberOfPeople = 2 // ranges from 1 to 10
+    @State private var tipPercentage = 2 // selects from array of percentages
     
     let tipRanges = [10, 15, 20, 25, 0]
     
@@ -19,7 +33,7 @@ struct ContentView: View {
         let peopleCount = Double(numberOfPeople)
         let tipSelection = Double(tipRanges[tipPercentage])
         
-        let orderAmount = Double(checkAmount) ?? 0
+        let orderAmount = Double(checkAmount.inputValue) ?? 0
         
         let tipValue = orderAmount / 100 * tipSelection
         let grandTotal = orderAmount + tipValue
@@ -34,7 +48,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Amount", text: $checkAmount)
+                    TextField("Amount", text: $checkAmount.inputValue)
                         .keyboardType(.decimalPad)
                     Stepper("\(numberOfPeople) people split", value: $numberOfPeople, in: 1...10)
                 }
@@ -50,6 +64,15 @@ struct ContentView: View {
         }
     }
 }
+
+// Import UIKit
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

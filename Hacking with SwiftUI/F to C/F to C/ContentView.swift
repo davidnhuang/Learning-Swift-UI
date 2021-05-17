@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var startingUnit = 0 // selecting unit type from an array
-    @State private var convertedUnit = 0 // selecting unit type from an array
+    @State private var startingUnitInput = "" // selecting unit type from an array
     
     var unitLabels = ["C˚", "F˚", "K"]
     
@@ -18,7 +17,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 Section(header: Text("Convert from")) {
-                    textFieldStyle()
+                    TextField("Temperature in Fahrenheit", text: $startingUnitInput)
                     // Picker
                 }
                 Section(header: Text("To")) {
