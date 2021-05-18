@@ -32,7 +32,7 @@ struct ContentView: View {
             Form {
                 Section(header: Text("From")) {
                     TextField("F˚", text: $Fahrenheit)
-                    // Picker
+                        .keyboardType(.decimalPad)
                 }
                 Section(header: Text("To")) {
                     Picker("Unit", selection: $selectedUnit) {
