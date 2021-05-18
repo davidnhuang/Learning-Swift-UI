@@ -7,48 +7,47 @@
 
 import SwiftUI
 
-// Textfield manager
-class textInputManager: ObservableObject {
-    var charLimit = 15
-    
-    @Published var inputValue = "" {
-        didSet {
-            if inputValue.count > charLimit {
-                inputValue = String(inputValue.prefix(charLimit))
-            }
-        }
-    }
-}
-
 struct ContentView: View {
     
-    @State private var startingUnitInput = textInputManager() // selecting unit type from an array
-    @State private var targetConvertUnit = 0
+    @State private var Fahrenheit = "0.0"
+    @State private var selectedUnit = 0
     
-    var unitTypes = ["C˚", "K", "F˚"]
+    var unitLabels = ["˚C", "K", "˚F"]
+    
+    var conversion: String {
+        
+        let inputValue = Float(Fahrenheit) ?? 0
+        let Celsius = (inputValue-32)/1.8
+        let Kelvin = Celsius + 273.5
+        
+        let conversions = [Celsius, Kelvin, inputValue]
+        
+        let ouput = String(conversions[selectedUnit])
+        
+        return ouput
+    }
     
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("From")) {
-                    TextField("F˚", text: $startingUnitInput.inputValue)
+                    TextField("F˚", text: $Fahrenheit)
                     // Picker
                 }
                 Section(header: Text("To")) {
-                    Picker("Unit", selection: $targetConvertUnit) {
-                        ForEach(0 ..< unitTypes.count) {
-                            Text("\(self.unitTypes[$0])")
+                    Picker("Unit", selection: $selectedUnit) {
+                        ForEach(0 ..< unitLabels.count) {
+                            Text("\(self.unitLabels[$0])")
                         }
                     }.pickerStyle(SegmentedPickerStyle())
-                    Text("Converted here")
-                        .font(.body)
-                        .fontWeight(.regular)
+                    Text(conversion+" "+unitLabels[selectedUnit])
                 }
             }
-            .navigationTitle(Text("F˚→ \(unitTypes[0])"))
+            .navigationTitle(Text("˚F →"+unitLabels[selectedUnit]))
         }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
