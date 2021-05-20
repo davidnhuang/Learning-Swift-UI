@@ -46,21 +46,24 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    TextField("Amount", text: $checkAmount.inputValue)
-                        .keyboardType(.decimalPad)
-                    Stepper("\(numberOfPeople) people split", value: $numberOfPeople, in: 1...10)
+            ZStack {
+                Form {
+                    Section {
+                        TextField("Amount", text: $checkAmount.inputValue)
+                            .keyboardType(.decimalPad)
+                        Stepper("\(numberOfPeople) people split", value: $numberOfPeople, in: 1...10)
+                            
+                    }
+                    Section(header: Text("Tip amount")) {
+                        Picker("Tip percentage", selection: $tipPercentage) {
+                            ForEach(0 ..< tipRanges.count) {
+                                Text("\(self.tipRanges[$0])%")
+                            }
+                        }.pickerStyle(SegmentedPickerStyle())
+                    }
                 }
-                Section(header: Text("Tip amount")) {
-                    Picker("Tip percentage", selection: $tipPercentage) {
-                        ForEach(0 ..< tipRanges.count) {
-                            Text("\(self.tipRanges[$0])%")
-                        }
-                    }.pickerStyle(SegmentedPickerStyle())
-                }
+                .navigationTitle("$\(totalPerPerson)")
             }
-            .navigationTitle("$\(totalPerPerson)")
         }
     }
 }
