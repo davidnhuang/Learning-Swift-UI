@@ -9,39 +9,68 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var tapCount = 0
-    @State private var didTap = false
-    @State private var label = "Cancel Appoinment"
-    @State private var confirmCancel = false
+    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "United Kingdom", "United States"].shuffled()
+    @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var score = 0
     
-    func tapResponse() {
-        if !didTap {
-            confirmCancel = true
-            label = "Canceled"
-        } else {
-            return
+    @State private var showingScore = false
+    @State private var resultTitle = ""
+    
+    
+    var body: some View {
+        ZStack {
+            // Background gradient - lowest layer
+            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.black]), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea(.all)
+            // Stack of text and flags
+            VStack(spacing: 30) {
+                VStack(spacing: 12) {
+                    Text("Tap the flag of ").foregroundColor(.white)
+                    Text(countries[correctAnswer]).foregroundColor(.white)
+                        .font(.largeTitle)
+                        .fontWeight(.black)
+                }
+                Spacer()
+                // Loop through 3 items
+                ForEach(0..<3) { number in
+                    Button(action: {
+                        self.didTap(number)
+                    }) {
+                        Image(self.countries[number])
+                            .renderingMode(.original)
+                            .clipShape(Capsule()) // clip shape
+                            .overlay(Capsule().stroke(Color.gray, lineWidth: 1)) // stroke outline
+                            .shadow(color: .gray, radius: 2) // shadow
+                    }
+                }
+                Spacer()
+                //Score
+                Text("Your score: \(score)")
+                    .font(.body)
+                    .foregroundColor(.white)
+            }
+        }
+        .alert(isPresented: $showingScore) {
+            Alert(title: Text(resultTitle), message: Text("Your score is \(score)"), dismissButton: .default(Text("Continue")) {
+                resetGame()
+            })
         }
     }
     
-    var body: some View {
-        
-        Form {
-            Button(action:{tapResponse()}){
-                HStack(spacing: 10) {
-                    Image(systemName: "xmark")
-                    Text(label)
-                }.foregroundColor(.red)
-            }
-            .alert(isPresented: $confirmCancel, content: {
-                Alert(
-                    title: Text("Are you sure?"),
-                    message: Text("This action cannot be undone"),
-                    primaryButton: .default(Text("Ok, cancel it")),
-                    secondaryButton: .default(Text("Go back"))
-                )
-            })
+    func didTap (_ number: Int) {
+        if number == correctAnswer {
+            resultTitle = "Correct"
+            score += 1
+        } else {
+            resultTitle = "Oops - that's not correct"
         }
         
+        showingScore = true
+    }
+    
+    func resetGame() {
+        countries.shuffled()
+        correctAnswer = Int.random(in: 0...2)
     }
 }
 
