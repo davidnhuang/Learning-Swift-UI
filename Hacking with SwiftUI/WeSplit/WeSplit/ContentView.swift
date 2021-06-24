@@ -27,6 +27,14 @@ struct ContentView: View {
     @State private var numberOfPeople = 2 // ranges from 1 to 10
     @State private var tipPercentage = 2 // selects from array of percentages
     
+    var givingTip: Bool {
+        if tipPercentage == 4 {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     let tipRanges = [10, 15, 20, 25, 0]
     
     var totalPerPerson: String {
@@ -46,36 +54,28 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                Form {
-                    Section {
-                        TextField("Amount", text: $checkAmount.inputValue)
-                            .keyboardType(.decimalPad)
-                        Stepper("\(numberOfPeople) people split", value: $numberOfPeople, in: 1...10)
-                            
-                    }
-                    Section(header: Text("Tip amount")) {
-                        Picker("Tip percentage", selection: $tipPercentage) {
-                            ForEach(0 ..< tipRanges.count) {
-                                Text("\(self.tipRanges[$0])%")
-                            }
-                        }.pickerStyle(SegmentedPickerStyle())
-                    }
+            Form {
+                Section {
+                    TextField("Amount", text: $checkAmount.inputValue)
+                        .keyboardType(.decimalPad)
+                        .foregroundColor(givingTip ? .black : .red)
+                    Stepper("\(numberOfPeople) people split", value: $numberOfPeople, in: 1...10)
+                        
                 }
-                .navigationTitle("$\(totalPerPerson)")
+                
+                Section(header: Text("Tip amount")) {
+                    Picker("Tip percentage", selection: $tipPercentage) {
+                        ForEach(0 ..< tipRanges.count) {
+                            Text("\(self.tipRanges[$0])%")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
             }
+            .navigationTitle("$\(totalPerPerson)")
         }
     }
 }
-
-// Import UIKit
-#if canImport(UIKit)
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-#endif
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

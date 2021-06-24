@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+struct FlagViewStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .clipShape(Capsule()) // clip shape
+            .overlay(Capsule().stroke(Color.gray, lineWidth: 1)) // stroke outline
+            .shadow(color: .gray, radius: 2) // shadow
+    }
+}
+
 struct ContentView: View {
     
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "United Kingdom", "United States"].shuffled()
@@ -37,10 +46,8 @@ struct ContentView: View {
                         self.didTap(number)
                     }) {
                         Image(self.countries[number])
-                            .renderingMode(.original)
-                            .clipShape(Capsule()) // clip shape
-                            .overlay(Capsule().stroke(Color.gray, lineWidth: 1)) // stroke outline
-                            .shadow(color: .gray, radius: 2) // shadow
+                            .modifier(FlagViewStyle())
+                            
                     }
                 }
                 Spacer()
